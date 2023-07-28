@@ -1,16 +1,12 @@
-// script.js
-import $ from 'jquery';
-
 function getIPAddress() {
     fetch('https://api.ipify.org?format=json')
         .then(response => response.json())
         .then(data => {
             // Update the paragraph element with the IP address
-            const ipAddress = data.ip;
-            // Resolve the Promise with the IP address
+            let ipAddress = data.ip;
             console.log('IP Address:', ipAddress);
-            resolve(ipAddress);
-
+            // Call the function to display the IP address and post it
+            updateIPAndPost(ipAddress);
         })
         .catch(error => {
             console.error('Error fetching IP address:', error);
@@ -28,10 +24,16 @@ function postIPAddress(ipAddress) {
     });
 }
 
-// Call the function to update the visit count when the page loads
-$(document).ready(function () {
-    let ip = getIPAddress();
+function updateIPAndPost(ipAddress) {
     const formattedIP = "Your IP: " + ipAddress;
     document.getElementById('ip-address').textContent = formattedIP;
-    postIPAddress(ip);
+    postIPAddress(ipAddress);
+}
+
+// Call the function to update the visit count when the page loads
+$(document).ready(function () {
+    getIPAddress();
 });
+
+console.log("JS DONE RUNNING");
+
