@@ -17,7 +17,19 @@ function getIPAddress() {
         });
 }
 
+function postIPAddress(ipAddress) {
+    $.ajax({
+        url: 'https://5asnqpgke4.execute-api.us-east-1.amazonaws.com/Live/',
+        type: 'POST',
+        data: JSON.stringify({
+            ip: ipAddress
+        }),
+        contentType: 'application/json'
+    });
+}
+
 // Call the function to update the visit count when the page loads
 $(document).ready(function () {
-    getIPAddress();
+    let ip = getIPAddress();
+    postIPAddress(ip);
 });
