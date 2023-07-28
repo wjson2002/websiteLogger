@@ -6,7 +6,11 @@ function getIPAddress() {
         .then(response => response.json())
         .then(data => {
             // Update the paragraph element with the IP address
-            document.getElementById('ip-address').textContent = data.ip;
+            const ipAddress = data.ip;
+            // Resolve the Promise with the IP address
+            console.log('IP Address:', ipAddress);
+            resolve(ipAddress);
+
         })
         .catch(error => {
             console.error('Error fetching IP address:', error);
