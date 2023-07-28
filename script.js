@@ -31,6 +31,7 @@ function postIPAddress(ipAddress) {
 // Call the function to update the visit count when the page loads
 $(document).ready(function () {
     let ip = getIPAddress();
-    document.getElementById('ip-address').textContent = ipAddress;
+    const formattedIP = "Your IP: " + ipAddress;
+    document.getElementById('ip-address').textContent = formattedIP;
     postIPAddress(ip);
 });
