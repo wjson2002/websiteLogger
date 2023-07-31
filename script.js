@@ -14,6 +14,13 @@ function getCounter() {
         });
 }
 
+
+function updateYourCount(yCount){
+    const currentYCount = "Your Total Visits: " + yCount;
+    document.getElementById('yourCount').textContent = currentYCount;
+    
+}
+
 function updateCount(count){
     const currentCount = "Total Unique Visitors: " + count;
     document.getElementById('count').textContent = currentCount;
@@ -43,6 +50,12 @@ function postIPAddress(ipAddress) {
         data: JSON.stringify({
             ip: ipAddress
         }),
+        success: function(response) {
+            let curYCount = response.yourIP[0].count.N;
+            updateYourCount(curYCount);
+            console.log(curYCount);
+            console.log(response);
+        },
         contentType: 'application/json'
     });
 }
@@ -59,6 +72,7 @@ function updateIPAndPost(ipAddress) {
 $(document).ready(function () {
     getIPAddress();
     getCounter();
+
 });
 
 console.log("JS DONE RUNNING");
