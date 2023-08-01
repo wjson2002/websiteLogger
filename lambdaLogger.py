@@ -5,18 +5,9 @@ import boto3
 tableName = "PeerProject"
 serverURL = "http://3.210.92.223"
 client = boto3.client('dynamodb')
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table(tableName)
+
 
 def create_item(ip: str):
-    #client.get_item(TableName=tableName, Key={"ip": {'S': ip}})
-    # client.update_item(
-    #     TableName = tableName
-    #     Key={"IP": ip_to_increment},
-    #     UpdateExpression="SET #countAttr = #countAttr + :inc",
-    #     ExpressionAttributeNames={"#countAttr": "count"},
-    #     ExpressionAttributeValues={":inc": 1}
-    # )   
     client.put_item(TableName=tableName,Item={"ip": {'S': ip}, 'count': {'N': "1"}})
         
 def get_item(ip: str):
@@ -42,6 +33,8 @@ def update_item_count(ip: str):
 def lambda_handler(event, context):
     data = client.scan(TableName=tableName)
     
+    item_count = data['Count']
+    ip_address = "-1"
     try:
         request_body = json.loads(event['body'])
         ip_address = request_body['ip']
@@ -52,11 +45,10 @@ def lambda_handler(event, context):
         else:
             create_item(ip_address)
         
-        
     except:
         return {
         'statusCode': 200,
-        'body': json.dumps({"message": "ip","messsage1" : "error in creating/getting item", "data": data}),
+        'body': json.dumps({"count": item_count,"messsage1" : "error in creating/getting item"}),
         'headers': {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Headers': 'Content-Type',
@@ -65,10 +57,9 @@ def lambda_handler(event, context):
         }
     }
     
-    
     return {
         'statusCode': 200,
-        'body': json.dumps(data),
+        'body': json.dumps({"count": item_count,"yourIP": get_item(ip_address)}),
         'headers': {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Headers': 'Content-Type',
