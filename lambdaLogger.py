@@ -29,6 +29,13 @@ def update_item_count(ip: str):
         ExpressionAttributeNames={'#countAttr': 'count'},
         ExpressionAttributeValues={':inc': {'N': '1'}}
     )
+    client.update_item(
+        TableName=tableName,
+        Key={'ip': {'S': "-1"}},
+        UpdateExpression='SET #countAttr = #countAttr + :inc',
+        ExpressionAttributeNames={'#countAttr': 'count'},
+        ExpressionAttributeValues={':inc': {'N': '1'}}
+    )
     
 def lambda_handler(event, context):
     data = client.scan(TableName=tableName)
